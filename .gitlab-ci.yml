@@ -1,0 +1,25 @@
+image: ubuntu:16.04
+
+before_script:
+  - apt-get update --quiet
+  - apt-get install --yes build-essential gcc-multilib bc kernel-package libncurses5-dev bzip2 liblz4-tool git
+  - git clone https://gitlab.com/alize_kernel/toolchain.git -b alize-stock
+  - git clone https://gitlab.com/alize_kernel/Assets.git -b alize-stock A; shopt -s dotglob nullglob; cd A; rm -rf .git; cd ..; mv A/* .; rmdir A
+  - chmod +x build.sh
+  - mkdir Builds
+  - cd Builds
+  - mkdir Nougat
+  - cd ..
+
+stages:
+  - build
+
+build:
+  stage: build
+  script:
+    - ./build.sh
+  artifacts:
+    paths:
+    - Builds
+    expire_in: 1 week
+
